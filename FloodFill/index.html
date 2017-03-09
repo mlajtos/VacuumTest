@@ -1,0 +1,81 @@
+<html>
+    <head>
+        <title>FloodFill</title>
+        <style>
+            body{
+                background-color: darkgray;
+            }
+        </style>
+    </head>
+    <body>
+        <canvas height="1600" width="1600"></canvas>
+        <script>
+            function floodFill(screen, x, y, newcolor) {
+                var q = []
+
+                q.push({x, y})
+
+                let oldColor = getPixelColor(screen, x, y)
+
+                if (newcolor == oldColor) {
+                    return
+                }
+
+                while (q.length > 0) {
+                    let {x, y} = q.pop()
+
+                    if ((0 <= x && x < screen.width) && (0 < y && y < screen.height)) {
+                        let color = getPixelColor(screen, x, y)
+                        if (Math.abs(color - oldColor) < 128) {
+                            setPixelColor(screen, x, y, newcolor)
+
+                            q.push({x: x,   y: y-1})
+                            q.push({x: x+1, y: y})
+                            q.push({x: x,   y: y+1})
+                            q.push({x: x-1, y: y})    
+                        }
+                    }
+                }
+            }
+
+            function getPixelColor(screen, x, y) {
+                let coords = (y * screen.width + x) * 4
+                let r = screen.data[coords + 0]
+                let g = screen.data[coords + 1]
+                let b = screen.data[coords + 2]
+                let a = screen.data[coords + 3]
+                return ((((((r << 8) | g) << 8) | b) << 8) | a) >>> 0
+            }
+
+            function setPixelColor(screen, x, y, color) {
+                let coords = (y * screen.width + x) * 4
+                screen.data[coords + 3] = color & 0xFF
+                screen.data[coords + 2] = (color >> 8) & 0xFF
+                screen.data[coords + 1] = (color >> 16) & 0xFF
+                screen.data[coords + 0] = (color >> 24) & 0xFF
+            }
+
+            let canvas = document.querySelector("canvas")
+            let context = canvas.getContext("2d")
+
+            let image = new Image()
+
+            image.onload = function() {
+                context.drawImage(image, 0, 0, canvas.width, canvas.height);
+            };
+            image.src = "image.png";
+
+            canvas.addEventListener("click", function(event) {
+                const
+                    x = event.offsetX,
+                    y = event.offsetY,
+                    width = canvas.width,
+                    height = canvas.height
+
+                var imageData = context.getImageData(0, 0, width, height);
+                floodFill(imageData, x, y, Math.floor(Math.random() * 4294967295))
+                context.putImageData(imageData, 0, 0)
+            })
+        </script>
+    </body>
+</html>
