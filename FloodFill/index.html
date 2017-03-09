@@ -10,14 +10,14 @@
     <body>
         <canvas height="1600" width="1600"></canvas>
         <script>
-            function floodFill(screen, x, y, newcolor) {
+            function floodFill(screen, x, y, newColor) {
                 var q = []
 
                 q.push({x, y})
 
                 let oldColor = getPixelColor(screen, x, y)
 
-                if (newcolor == oldColor) {
+                if (newColor == oldColor) {
                     return
                 }
 
@@ -27,7 +27,7 @@
                     if ((0 <= x && x < screen.width) && (0 < y && y < screen.height)) {
                         let color = getPixelColor(screen, x, y)
                         if (Math.abs(color - oldColor) < 128) {
-                            setPixelColor(screen, x, y, newcolor)
+                            setPixelColor(screen, x, y, newColor)
 
                             q.push({x: x,   y: y-1})
                             q.push({x: x+1, y: y})
