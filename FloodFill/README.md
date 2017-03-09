@@ -13,4 +13,4 @@ http-server
 ```
 
 ## Screenshot
-![Flood Fill](FloodFill/screenshot.png)
+![Flood Fill](screenshot.png)
